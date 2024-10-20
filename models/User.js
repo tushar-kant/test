@@ -1,18 +1,39 @@
-// Import mongoose to define the schema and interact with MongoDB
+// models/User.js
 const mongoose = require('mongoose');
 
-// Define a User schema for MongoDB
 const userSchema = new mongoose.Schema({
-  telegramId: { type: String, required: true, unique: true },
-  points: { type: Number, default: 0 },
-  lastCheckin: { type: Date, default: null },
-  referredBy: { type: String, default: null },
-  adsWatchedToday: { type: Number, default: 0 },    // NEW: Ads watched today
-  lastAdWatched: { type: Date, default: null },     // NEW: Last ad watched date
+  telegramId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  userId: {
+    type: String,
+    default: 'No id',
+  },
+  firstName: {
+    type: String,
+    default: 'No first name',
+  },
+  lastName: {
+    type: String,
+    default: 'No last name',
+  },
+  username: {
+    type: String,
+    default: 'No username',
+  },
+  points: {
+    type: Number,
+    default: 0,
+  },
+  lastCheckin: Date,
+  adsWatchedToday: {
+    type: Number,
+    default: 0,
+  },
+  lastAdWatched: Date,
+  referredBy: String, // ID of the referrer (if applicable)
 });
 
-// Create a User model from the schema
-const User = mongoose.model('User', userSchema);
-
-// Export the User model to be used in other files
-module.exports = User;
+module.exports = mongoose.model('User', userSchema);

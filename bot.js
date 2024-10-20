@@ -28,7 +28,7 @@ function sendMenu(chatId) {
         [{ text: 'Daily Check-In', callback_data: 'checkin' }],
         [{ text: 'Watch Ad (5/day)', callback_data: 'watchad' }],
         [{ text: 'Refer a Friend', callback_data: 'refer' }],
-        [{ text: 'Tasks', callback_data: 'tasks' }] // New Tasks button
+        [{ text: 'Tasks', callback_data: 'tasks' }] // Tasks button for additional options
       ]
     }
   });
