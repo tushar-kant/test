@@ -28,7 +28,11 @@ function sendMenu(chatId) {
         [{ text: 'Daily Check-In', callback_data: 'checkin' }],
         [{ text: 'Watch Ad (5/day)', callback_data: 'watchad' }],
         [{ text: 'Refer a Friend', callback_data: 'refer' }],
-        [{ text: 'Tasks', callback_data: 'tasks' }] // Tasks button for additional options
+        [{ text: 'Tasks', callback_data: 'tasks' }] ,
+        [
+          { text: 'Visit Website', url: 'https://t.me/leafinnovator_bot/leaf' }, // Website button
+          { text: 'Visit Channel', url: 'https://t.me/+gusmEv1pYiVjMWNl' } // Channel button
+        ]
       ]
     }
   });
