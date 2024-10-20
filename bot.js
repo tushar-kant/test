@@ -152,15 +152,35 @@ function generateReferralLink(chatId) {
   return `https://t.me/${botUsername}?start=${chatId}`;
 }
 
-// Handle incoming bot messages
 bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text.toLowerCase();
 
   if (text.startsWith('/start')) {
     sendMenu(chatId); // Call the sendMenu function
+  } else if (text.startsWith('/points')) {
+    await handlePoints(chatId); // Call the handlePoints function
   }
 });
+
+// Function to handle points command
+async function handlePoints(chatId) {
+  try {
+    let user = await User.findOne({ telegramId: chatId });
+    
+    if (!user) {
+      bot.sendMessage(chatId, 'You do not have an account yet. Please register first.');
+      return;
+    }
+
+    // Send the user their total points
+    bot.sendMessage(chatId, `You have a total of ${user.points} points.`);
+  } catch (err) {
+    bot.sendMessage(chatId, 'An error occurred while retrieving your points.');
+    console.error(err);
+  }
+}
+
 
 // Handle button clicks from the inline keyboard
 bot.on('callback_query', async (callbackQuery) => {
