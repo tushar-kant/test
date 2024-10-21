@@ -11,9 +11,14 @@ connectDB();
 const express = require('express');
 const mongoose = require('mongoose');
 const validator = require('validator');
+const cors = require('cors'); // Import cors
+
 
 // Create an Express app
 const app = express();
+// Use CORS middleware (allow all origins by default)
+app.use(cors());
+
 
 // Middleware to parse JSON
 app.use(express.json());
