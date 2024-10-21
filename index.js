@@ -6,6 +6,8 @@ const connectDB = require('./db');
 
 // Connect to MongoDB
 connectDB();
+// Import and initialize the bot
+require('./bot');
 
 // Import necessary modules
 const express = require('express');
