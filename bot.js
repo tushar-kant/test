@@ -72,9 +72,10 @@ function sendTasks(chatId) {
   const tasks = `
 Here are some tasks you can complete to earn points:
 
-1. **Join our YouTube channel**: [YouTube Channel Link](https://www.youtube.com/your-channel)
-2. **Follow us on Twitter**: [Twitter Profile](https://twitter.com/your-profile)
-3. **Join our Discord server**: [Discord Server](https://discord.gg/your-invite)
+1. **Join our YouTube channel**: [YouTube Channel Link](https://www.youtube.com/@leaf_innovator)
+2. **Follow us on X**: [X Profile](https://x.com/LeafInnovator)
+3. **Follow us on Instagram**: [Insta Profile](https://www.instagram.com/leaf_innovator)
+
 
 Complete these tasks and let us know to earn additional points!
   `;
@@ -97,7 +98,7 @@ async function handleCheckin(chatId) {
       user.points = (user.points || 0) + 10; // Ensure points is initialized
       user.lastCheckin = now;
       await user.save();
-      bot.sendMessage(chatId, `Check-in successful! You now have ${user.points} points.`)
+      bot.sendMessage(chatId, `Check-in successful! You now have ${user.points} tLEAF.`)
         .catch(err => logError(err, 'handleCheckin - check-in successful'));
     }
   } catch (err) {
@@ -133,7 +134,7 @@ async function handleAdWatch(chatId) {
       user.lastAdWatched = now; // Update last ad watched time
       await user.save();
 
-      bot.sendMessage(chatId, `Thanks for watching the ad! You've earned 5 points. You now have ${user.points} points.`)
+      bot.sendMessage(chatId, `Thanks for watching the ad! You've earned 5 tLEAF. You now have ${user.points} tLEAF.`)
         .catch(err => logError(err, 'handleAdWatch - points message'));
     }
   } catch (err) {
@@ -161,7 +162,7 @@ async function handleReferral(chatId, referrerId) {
       user.points = (user.points || 0) + 10; // Reward the new user
       await user.save();
 
-      bot.sendMessage(chatId, 'You and your referrer have both been rewarded with 10 points!')
+      bot.sendMessage(chatId, 'You and your referrer have both been rewarded with 10 tLEAF!')
         .catch(err => logError(err, 'handleReferral - reward message'));
     } else {
       bot.sendMessage(chatId, 'You are already registered. You cannot be referred again.')
@@ -207,7 +208,7 @@ async function handlePoints(chatId) {
     }
 
     // Send the user their total points
-    bot.sendMessage(chatId, `You have a total of ${user.points || 0} points.`)
+    bot.sendMessage(chatId, `You have a total of ${user.points || 0} tLEAF.`)
       .catch(err => logError(err, 'handlePoints - points message'));
   } catch (err) {
     bot.sendMessage(chatId, 'An error occurred while retrieving your points.')
