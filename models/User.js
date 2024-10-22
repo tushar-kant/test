@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'No username',
   },
+
+  email: {
+    type: String,
+    default: null, // Set default to null or you can omit this line
+  },
   points: {
     type: Number,
     default: 0,

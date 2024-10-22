@@ -3,6 +3,9 @@ require('dotenv').config();
 
 // Import the database connection
 const connectDB = require('./db');
+const taskRoutes = require('./routes/taskRoutes'); // Adjust the path as necessary
+const profileRoutes = require('./routes/profile'); // Adjust the path as necessary
+
 
 // Connect to MongoDB
 connectDB();
@@ -25,25 +28,16 @@ app.use(cors());
 // Middleware to parse JSON
 app.use(express.json());
 
-// Define the Wishlist model
-const wishlistSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    validate: [validator.isEmail, 'Please provide a valid email'],
-    unique: true, // Prevent duplicate emails
-  },
-  points: {
-    type: Number,
-    default: 0,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
 
-const Wishlist = mongoose.model('Wishlist', wishlistSchema);
+
+const Wishlist = require('./models/Wishlist'); // Import Wishlist model
+// Import task routes
+
+// Use task routes
+app.use('/tasks', taskRoutes);
+app.use('/profile', profileRoutes);
+
+
 
 // API route to add email to the wishlist
 app.post('/wishlist', async (req, res) => {

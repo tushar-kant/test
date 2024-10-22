@@ -34,6 +34,8 @@ function sendMenu(chatId) {
         [{ text: 'Watch Ad (5/day)', callback_data: 'watchad' }],
         [{ text: 'Refer a Friend', callback_data: 'refer' }],
         [{ text: 'Tasks', callback_data: 'tasks' }],
+        [{ text: 'Bind Your Wishlisted Email', callback_data: 'bind_email' }], // New menu option
+
         [
           { text: 'Visit Website', url: 'https://t.me/leafinnovator_bot/leaf' },
           { text: 'Visit Channel', url: 'https://t.me/+gusmEv1pYiVjMWNl' }
@@ -41,6 +43,28 @@ function sendMenu(chatId) {
       ]
     }
   }).catch(err => logError(err, 'sendMenu'));
+}
+// Function to handle email binding
+async function handleEmailBinding(chatId, email) {
+  try {
+    let user = await User.findOne({ telegramId: chatId }) || new User({ telegramId: chatId });
+
+    // Update the user's email
+    user.email = email; // Store the email
+    await user.save();
+
+    bot.sendMessage(chatId, `Your wishlisted email has been bound: ${email}`)
+      .catch(err => logError(err, 'handleEmailBinding - success message'));
+  } catch (err) {
+    bot.sendMessage(chatId, 'An error occurred while binding your email.')
+      .catch(err => logError(err, 'handleEmailBinding - message error'));
+    logError(err, 'handleEmailBinding');
+  }
+}
+// Function to validate the email format
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).toLowerCase());
 }
 
 // Function to send tasks to the user
@@ -212,9 +236,22 @@ bot.on('callback_query', async (callbackQuery) => {
     } else if (action === 'tasks') {
       sendTasks(chatId); // Send tasks when the button is clicked
     }
+    else if (action === 'bind_email') {
+      bot.sendMessage(chatId, 'Please send me your wishlisted email:');
+      bot.once('message', async (msg) => {
+        const email = msg.text;
 
+        if (validateEmail(email)) {
+          await handleEmailBinding(chatId, email);
+        } else {
+          bot.sendMessage(chatId, 'Invalid email format. Please try again.');
+        }
+      });
+    }
+    if (action === 'start') {
+      sendMenu(chatId);
+    }
     bot.answerCallbackQuery(callbackQuery.id).catch(err => logError(err, 'callback_query - answer'));
-    sendMenu(chatId); // Always show the menu after any action
   } catch (err) {
     logError(err, 'callback_query - action handling');
   }
