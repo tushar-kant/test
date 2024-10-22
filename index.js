@@ -33,6 +33,10 @@ const wishlistSchema = new mongoose.Schema({
     validate: [validator.isEmail, 'Please provide a valid email'],
     unique: true, // Prevent duplicate emails
   },
+  points: {
+    type: Number,
+    default: 0,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -67,7 +71,55 @@ app.post('/wishlist', async (req, res) => {
     return res.status(500).json({ error: 'Server error. Please try again later.' });
   }
 });
+app.post('/check-wishlist', async (req, res) => {
+  const { email } = req.body;
 
+  try {
+    const user = await Wishlist.findOne({ email });
+    if (user) {
+      return res.status(200).json({ message: 'Email found', points: user.points });
+    } else {
+      return res.status(404).json({ message: 'Email not found' });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: 'Server error' });
+  }
+});
+// API route to retrieve total points for a user
+app.post('/get-total-points', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await Wishlist.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Return the user's total points
+    return res.status(200).json({ points: user.points });
+  } catch (error) {
+    console.error('Error fetching user points:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Update user points
+app.post('/update-points', async (req, res) => {
+  const { email, points } = req.body;
+
+  try {
+    const user = await Wishlist.findOne({ email });
+    if (user) {
+      user.points += points;
+      await user.save();
+      return res.status(200).json({ message: 'Points updated', totalPoints: user.points });
+    } else {
+      return res.status(404).json({ message: 'Email not found' });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: 'Server error' });
+  }
+});
 // Set up a simple route to check if the server is running
 app.get('/', (req, res) => {
   res.send('Server is running!');
